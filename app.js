@@ -42,6 +42,27 @@ async function run(params) {
     const deleteOneResult = await students.deleteOne({ name: "Ali" });
     console.log("Deleted one document:", deleteOneResult.deletedCount);
 
+    const allStudents = await students.find().toArray();
+    console.log("All Students:");
+    console.log(allStudents);
+
+    const filteredStudents = await students
+      .find({ age: { $gt: 22 } })
+      .toArray();
+    console.log("Students older than 22:");
+    console.log(filteredStudents);
+
+    const projectedStudents = await students
+      .find({}, { projection: { _id: 0, name: 1, department: 1 } })
+      .toArray();
+    console.log("Projected Students (only name & department):");
+    console.log(projectedStudents);
+
+    const deleteManyResult = await students.deleteMany({
+      department: "Software Engineering",
+    });
+    console.log("Deleted many students:", deleteManyResult.deletedCount);
+
     console.log("All CRUD operations completed successfully");
   } catch (err) {
     console.log("connection error has been detected".err);
